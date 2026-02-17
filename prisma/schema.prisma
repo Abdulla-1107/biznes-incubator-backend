@@ -1,0 +1,283 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//////////////////////////////////////
+// ENUMS
+//////////////////////////////////////
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+}
+
+enum PartnerType {
+  INVESTOR
+  CORPORATE
+  MEDIA
+  GRANT
+}
+
+enum ServiceCategory {
+  BUSINESS_MODEL
+  LAUNCH
+  TECHNICAL
+  MARKETING_SALES
+  EDUCATION
+  INVESTMENT
+}
+
+enum MentorSpecialization {
+  BUSINESS
+  TECHNOLOGY
+  MARKETING
+  FINANCE
+  LEGAL
+  DESIGN
+  HR
+  OTHER
+}
+
+enum StartupStage {
+  IDEA
+  MVP
+  EARLY
+  GROWTH
+  SCALE
+}
+
+enum StartupIndustry {
+  FINTECH
+  EDTECH
+  HEALTHTECH
+  AGRITECH
+  ECOMMERCE
+  LOGISTICS
+  AI_ML
+  SAAS
+  OTHER
+}
+
+enum EventFormat {
+  ONLINE
+  OFFLINE
+  HYBRID
+}
+
+enum EventCategory {
+  WORKSHOP
+  CONFERENCE
+  HACKATHON
+  NETWORKING
+  DEMO_DAY
+  TRAINING
+  PITCH
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  ARCHIVED
+}
+
+//////////////////////////////////////
+// APPLICATION (Rezidentlik arizasi)
+//////////////////////////////////////
+
+model Application {
+  id               String            @id @default(uuid())
+  fullName         String
+  email            String
+  phone            String?
+  ideaDescription  String            @db.Text
+  industry         String?
+  teamSize         Int?
+  investmentNeeded Float?
+  fileUrl          String?
+  status           ApplicationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// SERVICE (Xizmatlar)
+//////////////////////////////////////
+
+model Service {
+  id       String          @id @default(uuid())
+  category ServiceCategory
+
+  titleUz String
+  titleEn String
+  titleRu String
+
+  descriptionUz String @db.Text
+  descriptionEn String @db.Text
+  descriptionRu String @db.Text
+
+  icon      String?
+  price     Float?
+  isPremium Boolean @default(false)
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// PARTNER (Hamkorlar)
+//////////////////////////////////////
+
+model Partner {
+  id         String      @id @default(uuid())
+  name       String
+  logoUrl    String?
+  websiteUrl String?
+  type       PartnerType
+  isActive   Boolean     @default(true)
+  sortOrder  Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// MENTOR (Mentorlar)
+//////////////////////////////////////
+
+model Mentor {
+  id             String               @id @default(uuid())
+  fullName       String
+  email          String?
+  phone          String?
+  photoUrl       String?
+  linkedinUrl    String?
+  specialization MentorSpecialization
+
+  bioUz String? @db.Text
+  bioEn String? @db.Text
+  bioRu String? @db.Text
+
+  positionUz String?
+  positionEn String?
+  positionRu String?
+
+  companyUz String?
+  companyEn String?
+  companyRu String?
+
+  experienceYears Int?
+  isActive        Boolean @default(true)
+  isFeatured      Boolean @default(false)
+  sortOrder       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// STARTUP (Startuplar)
+//////////////////////////////////////
+
+model Startup {
+  id       String           @id @default(uuid())
+  stage    StartupStage?
+  industry StartupIndustry?
+
+  nameUz String
+  nameEn String
+  nameRu String
+
+  descriptionUz String @db.Text
+  descriptionEn String @db.Text
+  descriptionRu String @db.Text
+
+  shortDescriptionUz String?
+  shortDescriptionEn String?
+  shortDescriptionRu String?
+
+  logoUrl    String?
+  websiteUrl String?
+  pitchDeck  String?
+
+  founderName      String?
+  founderEmail     String?
+  teamSize         Int?
+  foundedYear      Int?
+  investmentRaised Float?
+
+  isActive   Boolean @default(true)
+  isFeatured Boolean @default(false)
+  sortOrder  Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// EVENT (Tadbirlar)
+//////////////////////////////////////
+
+model Event {
+  id       String         @id @default(uuid())
+  format   EventFormat?
+  category EventCategory?
+
+  titleUz String
+  titleEn String
+  titleRu String
+
+  descriptionUz String @db.Text
+  descriptionEn String @db.Text
+  descriptionRu String @db.Text
+
+  locationUz String?
+  locationEn String?
+  locationRu String?
+
+  coverImageUrl String?
+  onlineLink    String?
+
+  startDate            DateTime
+  endDate              DateTime?
+  registrationDeadline DateTime?
+
+  maxParticipants Int?
+  price           Float?  @default(0)
+  isFree          Boolean @default(true)
+  isActive        Boolean @default(true)
+  isFeatured      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////
+// CONTACT (Bog'lanish)
+//////////////////////////////////////
+
+model Contact {
+  id     String        @id @default(uuid())
+  status ContactStatus @default(NEW)
+
+  fullName String
+  email    String
+  phone    String?
+  subject  String?
+  message  String  @db.Text
+
+  adminNote String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
