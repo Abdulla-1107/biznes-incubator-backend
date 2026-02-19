@@ -12,6 +12,7 @@ import { PartnerService } from './partner.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { PartnerType } from 'generated/prisma/enums';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('partners')
 export class PartnerController {
@@ -25,6 +26,16 @@ export class PartnerController {
 
   // GET /partners?type=INVESTOR&isActive=true
   @Get()
+   @ApiQuery({
+      name: 'type',
+      required: false, // optional qilish
+      enum: PartnerType, // agar enum bo‘lsa
+    })
+    @ApiQuery({
+      name: 'isActive',
+      required: false, // optional qilish
+      type: Boolean,
+    })
   findAll(
     @Query('type') type?: PartnerType,
     @Query('isActive') isActive?: string,

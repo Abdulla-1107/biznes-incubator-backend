@@ -12,6 +12,7 @@ import { MentorService } from './mentor.service';
 import { CreateMentorDto } from './dto/create-mentor.dto';
 import { UpdateMentorDto } from './dto/update-mentor.dto';
 import { MentorSpecialization } from 'generated/prisma/enums';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('mentors')
 export class MentorController {
@@ -25,6 +26,16 @@ export class MentorController {
 
   // GET /mentors?specialization=BUSINESS&isActive=true
   @Get()
+  @ApiQuery({
+    name: 'specialization',
+    required: false, // optional qilish
+    enum: MentorSpecialization, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'isActive',
+    required: false, // optional qilish
+    type: Boolean,
+  })
   findAll(
     @Query('specialization') specialization?: MentorSpecialization,
     @Query('isActive') isActive?: string,

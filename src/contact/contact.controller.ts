@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -29,6 +29,11 @@ export class ContactController {
   // GET /contacts?status=NEW
   @ApiOperation({ summary: 'Barcha xabarlarni olish' })
   @Get()
+  @ApiQuery({
+    name: 'status',
+    required: false, // optional qilish
+    enum: ContactStatus, // agar enum bo‘lsa
+  })
   findAll(@Query('status') status?: ContactStatus) {
     return this.contactService.findAll(status);
   }

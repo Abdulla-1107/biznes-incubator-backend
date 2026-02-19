@@ -12,6 +12,7 @@ import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { ServiceCategory } from 'generated/prisma/enums';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('services')
 export class ServiceController {
@@ -25,6 +26,16 @@ export class ServiceController {
 
   // GET /services?category=TECHNICAL&isActive=true
   @Get()
+  @ApiQuery({
+    name: 'category',
+    required: false, // optional qilish
+    enum: ServiceCategory, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'isActive',
+    required: false, // optional qilish
+    type: Boolean,
+  })
   findAll(
     @Query('category') category?: ServiceCategory,
     @Query('isActive') isActive?: string,

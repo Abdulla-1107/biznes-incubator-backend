@@ -12,6 +12,7 @@ import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventCategory, EventFormat } from 'generated/prisma/enums';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('events')
 export class EventController {
@@ -25,6 +26,21 @@ export class EventController {
 
   // GET /events?format=ONLINE&category=WORKSHOP&isActive=true
   @Get()
+  @ApiQuery({
+    name: 'format',
+    required: false, // optional qilish
+    enum: EventFormat, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'category',
+    required: false, // optional qilish
+    enum: EventCategory, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'isActive',
+    required: false, // optional qilish
+    type: Boolean,
+  })
   findAll(
     @Query('format') format?: EventFormat,
     @Query('category') category?: EventCategory,

@@ -12,6 +12,7 @@ import { StartupService } from './startup.service';
 import { CreateStartupDto } from './dto/create-startup.dto';
 import { UpdateStartupDto } from './dto/update-startup.dto';
 import { StartupIndustry, StartupStage } from 'generated/prisma/enums';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('startups')
 export class StartupController {
@@ -25,6 +26,21 @@ export class StartupController {
 
   // GET /startups?stage=MVP&industry=FINTECH&isActive=true
   @Get()
+  @ApiQuery({
+    name: 'stage',
+    required: false, // optional qilish
+    enum: StartupStage, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'industry',
+    required: false, // optional qilish
+    enum: StartupIndustry, // agar enum bo‘lsa
+  })
+  @ApiQuery({
+    name: 'isActive',
+    required: false, // optional qilish
+    type: Boolean,
+  })
   findAll(
     @Query('stage') stage?: StartupStage,
     @Query('industry') industry?: StartupIndustry,

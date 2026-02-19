@@ -5,7 +5,7 @@ import * as path from 'path';
 @Injectable()
 export class UploadService {
   getFileUrl(filename: string): string {
-    return `/uploads/${filename}`;
+    return `https://api.nafisart.uz/uploads/${filename}`;
   }
 
   deleteFile(filename: string): void {
